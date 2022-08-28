@@ -360,7 +360,9 @@ class FieldRenderer(BaseRenderer):
                 widget_label_class = merge_css_classes(self.horizontal_label_class, "col-form-label")
             else:
                 widget_label_class = "form-label"
-            label_classes = [widget_label_class] + label_classes
+            label_classes += [widget_label_class]
+            if self.field.field.required:
+                label_classes += ["fw-bold"]
         return merge_css_classes(*label_classes)
 
     def get_field_html(self):
