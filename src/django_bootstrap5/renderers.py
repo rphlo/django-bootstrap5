@@ -25,6 +25,11 @@ from .widgets import ReadOnlyPasswordHashWidget, is_widget_with_placeholder
 class BaseRenderer:
     """A content renderer."""
 
+    # Template paths for overriding in custom subclasses.
+    field_errors_template = "django_bootstrap5/field_errors.html"
+    field_help_text_template = "django_bootstrap5/field_help_text.html"
+    form_errors_template = "django_bootstrap5/form_errors.html"
+
     def __init__(self, **kwargs):
         self.layout = kwargs.get("layout", "")
         self.wrapper_class = kwargs.get("wrapper_class", get_bootstrap_setting("wrapper_class"))
@@ -131,7 +136,7 @@ class FormsetRenderer(BaseRenderer):
         formset_errors = self.get_formset_errors()
         if formset_errors:
             return render_template_file(
-                "django_bootstrap5/form_errors.html",
+                self.form_errors_template,
                 context={
                     "errors": formset_errors,
                     "form": self.formset,
@@ -178,7 +183,7 @@ class FormRenderer(BaseRenderer):
 
         if form_errors:
             return render_template_file(
-                "django_bootstrap5/form_errors.html",
+                self.form_errors_template,
                 context={"errors": form_errors, "form": self.form, "layout": self.layout, "type": type},
             )
 
@@ -393,7 +398,7 @@ class FieldRenderer(BaseRenderer):
         help_text = self.help_text or ""
         if help_text:
             return render_template_file(
-                "django_bootstrap5/field_help_text.html",
+                self.field_help_text_template,
                 context={
                     "field": self.field,
                     "help_text": help_text,
@@ -408,7 +413,7 @@ class FieldRenderer(BaseRenderer):
         field_errors = self.field_errors
         if field_errors:
             return render_template_file(
-                "django_bootstrap5/field_errors.html",
+                self.field_errors_template,
                 context={
                     "field": self.field,
                     "field_errors": field_errors,
@@ -490,16 +495,27 @@ class FieldRenderer(BaseRenderer):
         errors = self.get_errors_html()
 
         if self.is_form_control_widget():
-            addon_before = (
-                format_html('<span class="input-group-text">{}</span>', self.addon_before) if self.addon_before else ""
-            )
-            addon_after = (
-                format_html('<span class="input-group-text">{}</span>', self.addon_after) if self.addon_after else ""
-            )
+            if self.addon_before_class is None:
+                addon_before = self.addon_before
+            else:
+                addon_before = (
+                    format_html('<span class="{}">{}</span>', self.addon_before_class, self.addon_before)
+                    if self.addon_before
+                    else ""
+                )
+            if self.addon_after_class is None:
+                addon_after = self.addon_after
+            else:
+                addon_after = (
+                    format_html('<span class="{}">{}</span>', self.addon_after_class, self.addon_after)
+                    if self.addon_after
+                    else ""
+                )
             if addon_before or addon_after:
                 classes = "input-group"
                 if self.server_side_validation and self.get_server_side_validation_classes():
                     classes = merge_css_classes(classes, "has-validation")
+                    errors = errors or mark_safe("<div></div>")
                 field = format_html('<div class="{}">{}{}{}{}</div>', classes, addon_before, field, addon_after, errors)
                 errors = ""
 

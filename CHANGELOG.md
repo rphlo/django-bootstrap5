@@ -1,9 +1,34 @@
 # Changelog
 
+## 23.2 (2023-04-29)
+
+- Update packaging, reduce dependencies (#487, #488, #494).
+- Drop support for Django 4.0 (#494).
+- Add support for Django 4.2 (#480).
+- User ruff for linting and formatting (#482).
+- Move version to setup.cfg (#487).
+
+## 23.1 (2023-04-02)
+
+- Fix documentation for button sizes (#457).
+- Update Bootstrap to 5.2.3 (#393).
+- Updated requirements and packages (#458).
+- Stop using coveralls service (#459).
+
+## 22.2 (2022-11-22)
+
+- Add support for Python 3.11 (#389).
+- Make it easier to override templates in custom renderers (#373).
+- Added .form-label default to `<label>`s (#180).
+- Update radio_select_button_group widget to BS5 (#313).
+- Fix `addon_before_class` and `addon_after_class`, which were being ignored (#153).
+- Fix to issue (#349) where `has-validation` was incorrectly rounding before and after elements' borders when validated.
+- Update the default JS and CSS urls mentioned on the settings page of the documentation.
+
 ## 22.1 (2022-08-08)
 
 - Update Bootstrap to 5.2.0 (#325).
-- Add support for Django 4.1 (#222).
+- Add support for Django 4.1 (#322).
 - Drop support for Django 2.2 (EOL) (#324).
 
 ## 21.3 (2021-12-27)
@@ -11,7 +36,7 @@
 - Drop support for Python 3.6 (EOL, #247, #248).
 - Drop support for Django 3.1 (EOL, #247, #248).
 - Fix tests for Django 4.1 (#247).
-- Update example app (#250)
+- Update example app (#250).
 
 ## 21.2 (2021-12-12)
 

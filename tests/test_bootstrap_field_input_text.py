@@ -8,12 +8,15 @@ class CharFieldTestForm(forms.Form):
     test = forms.CharField()
 
 
+class CharFieldRequiredTestForm(forms.Form):
+    test = forms.CharField(min_length=1)
+
+
 class InputTypeTextTestCase(BootstrapTestCase):
     """Test for TextInput widgets that only differ in `input_type`."""
 
     def test_input_type_text(self):
         """Test field with default CharField widget."""
-
         form = CharFieldTestForm()
 
         self.assertHTMLEqual(
@@ -41,7 +44,6 @@ class InputTypeTextTestCase(BootstrapTestCase):
 
     def test_input_type_text_more(self):
         """Test field with default CharField widget."""
-
         form = CharFieldTestForm()
 
         self.assertHTMLEqual(
@@ -52,6 +54,70 @@ class InputTypeTextTestCase(BootstrapTestCase):
                 '<div class="input-group">'
                 '<span class="input-group-text">foo</span>'
                 '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
+                "</div>"
+                "</div>"
+            ),
+        )
+
+        self.assertHTMLEqual(
+            self.render(
+                '{% bootstrap_field form.test addon_before="foo" addon_before_class="input-group-text-baz" %}',
+                context={"form": form},
+            ),
+            (
+                '<div class="django_bootstrap5-req mb-3">'
+                '<label for="id_test" class="form-label">Test</label>'
+                '<div class="input-group">'
+                '<span class="input-group-text-baz">foo</span>'
+                '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
+                "</div>"
+                "</div>"
+            ),
+        )
+
+        self.assertHTMLEqual(
+            self.render(
+                '{% bootstrap_field form.test addon_before="<div>Test Before</div>" addon_before_class=None %}',
+                context={"form": form},
+            ),
+            (
+                '<div class="django_bootstrap5-req mb-3">'
+                '<label for="id_test" class="form-label">Test</label>'
+                '<div class="input-group">'
+                "<div>Test Before</div>"
+                '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
+                "</div>"
+                "</div>"
+            ),
+        )
+
+        self.assertHTMLEqual(
+            self.render(
+                '{% bootstrap_field form.test addon_after="bar" addon_after_class="input-group-text-baz" %}',
+                context={"form": form},
+            ),
+            (
+                '<div class="django_bootstrap5-req mb-3">'
+                '<label for="id_test" class="form-label">Test</label>'
+                '<div class="input-group">'
+                '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
+                '<span class="input-group-text-baz">bar</span>'
+                "</div>"
+                "</div>"
+            ),
+        )
+
+        self.assertHTMLEqual(
+            self.render(
+                '{% bootstrap_field form.test addon_after="<div>Test After</div>" addon_after_class=None %}',
+                context={"form": form},
+            ),
+            (
+                '<div class="django_bootstrap5-req mb-3">'
+                '<label for="id_test" class="form-label">Test</label>'
+                '<div class="input-group">'
+                '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
+                "<div>Test After</div>"
                 "</div>"
                 "</div>"
             ),
@@ -89,6 +155,44 @@ class InputTypeTextTestCase(BootstrapTestCase):
                 '<div class="django_bootstrap5-req mb-3 form-floating">'
                 '<input class="form-control" id="id_test" name="test" placeholder="Test" required type="text">'
                 '<label for="id_test" class="form-label">Test</label>'
+                "</div>"
+            ),
+        )
+
+    def test_input_validation_failure(self):
+        """Test field with default CharField widget and min-length requirement to trigger validation errors."""
+        form = CharFieldRequiredTestForm(data={"test": ""})
+        self.assertFalse(form.is_valid())
+
+        self.assertHTMLEqual(
+            self.render('{% bootstrap_field form.test addon_before="foo" %}', context={"form": form}),
+            (
+                '<div class="django_bootstrap5-err django_bootstrap5-req mb-3">'
+                '<label class="form-label" for="id_test">Test</label>'
+                '<div class="input-group has-validation">'
+                '<span class="input-group-text">foo</span>'
+                '<input type="text" name="test" minlength="1" class="form-control'
+                ' is-invalid" placeholder="Test" required id="id_test">'
+                '<div class="invalid-feedback">This field is required.</div>'
+                "</div>"
+                "</div>"
+            ),
+        )
+
+        form = CharFieldRequiredTestForm(data={"test": "a"})
+        self.assertTrue(form.is_valid())
+
+        self.assertHTMLEqual(
+            self.render('{% bootstrap_field form.test addon_before="foo" %}', context={"form": form}),
+            (
+                '<div class="django_bootstrap5-success django_bootstrap5-req mb-3">'
+                '<label class="form-label" for="id_test">Test</label>'
+                '<div class="input-group has-validation">'
+                '<span class="input-group-text">foo</span>'
+                '<input type="text" name="test" value="a" minlength="1" class="form-control'
+                ' is-valid" placeholder="Test" required id="id_test">'
+                "<div></div>"
+                "</div>"
                 "</div>"
             ),
         )
