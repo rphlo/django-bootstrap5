@@ -47,39 +47,28 @@ You will need some knowledge of git, github, and Python/Django development. Usin
 
 ### Local installation
 
-This section assumes you know about local Python versions and virtual environments.
+This package uses [uv](https://github.com/astral-sh/uv) and [just](https://github.com/casey/just).
 
-To clone the repository and install the requirements for local development:
+After installing both, check out this repository and type `just install` to bootstrap a development environment.
 
-```shell-script
+```console
 git clone git://github.com/zostera/django-bootstrap5.git
 cd django-bootstrap5
-pip install -e .
-pip install -U pip -r requirements-dev.txt
-```
-
-### Running the example app
-
-You can run the example app:
-
-```shell-script
-cd example && python manage.py runserver
+just install
 ```
 
 ### Running the tests
 
-The test suite requires tox to be installed.
+To run the tests:
 
-To run the complete test suite:
-
-```shell-script
-make tox
+```console
+just test
 ```
 
-To run the tests in your current environment:
+To run the tests on all supported Python/Django combinations:
 
-```shell-script
-make test
+```console
+just tests
 ```
 
 ## Pull Request Guidelines

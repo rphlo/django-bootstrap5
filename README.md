@@ -1,9 +1,8 @@
 # django-bootstrap5
 
-[![CI](https://github.com/zostera/django-bootstrap5/workflows/CI/badge.svg?branch=main)](https://github.com/zostera/django-bootstrap5/actions?workflow=CI)
+[![CI](https://github.com/zostera/django-bootstrap5/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/zostera/django-bootstrap5/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/zostera/django-bootstrap5/badge.svg?branch=main)](https://coveralls.io/github/zostera/django-bootstrap5?branch=main)
 [![Latest PyPI version](https://img.shields.io/pypi/v/django-bootstrap5.svg)](https://pypi.python.org/pypi/django-bootstrap5)
-[![Any color you like](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 Bootstrap 5 for Django.
 
@@ -21,6 +20,8 @@ This package requires a combination of Python and Django that is currently suppo
 
 See "Supported Versions" on https://www.djangoproject.com/download/.
 
+This package uses [uv](https://github.com/astral-sh/uv) and [just](https://github.com/casey/just) for local development.
+
 ## Documentation
 
 The full documentation is at https://django-bootstrap5.readthedocs.io/
@@ -29,7 +30,7 @@ The full documentation is at https://django-bootstrap5.readthedocs.io/
 
 1. Install using pip:
 
-    ```bash
+    ```console
     pip install django-bootstrap5
     ```
 
@@ -62,11 +63,10 @@ The full documentation is at https://django-bootstrap5.readthedocs.io/
 
 ## Example app
 
-An example app is provided in the folder `example`. You can run it with `python manage.py runserver`.
+An example app is provided in the folder `example`. You can run the example app with this command:
 
-```bash
-cd example
-python manage.py runserver
+```console
+just example
 ```
 
 ## Bugs and suggestions

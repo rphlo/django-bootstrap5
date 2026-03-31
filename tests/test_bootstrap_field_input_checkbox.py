@@ -1,6 +1,6 @@
 from django import forms
 
-from tests.base import BootstrapTestCase
+from tests.base import DJANGO_VERSION, BootstrapTestCase
 
 
 class CheckboxTestForm(forms.Form):
@@ -24,14 +24,24 @@ class InputTypeCheckboxTestCase(BootstrapTestCase):
 
     def test_input_type_checkbox_is_invalid(self):
         """Test field with checkbox widget."""
+        html = self.render(
+            "{% bootstrap_field form.test %}",
+            context={"form": CheckboxTestForm(data={})},
+        )
+        if DJANGO_VERSION >= "5":  # TODO: Django 4.2
+            html = html.replace(' aria-invalid="true"', "")
+        if DJANGO_VERSION >= "5.2":  # TODO: Django 5.1
+            html = html.replace(' aria-describedby="id_test_error"', "")
         self.assertHTMLEqual(
-            self.render("{% bootstrap_field form.test %}", context={"form": CheckboxTestForm(data={})}),
+            html,
             (
                 '<div class="django_bootstrap5-err django_bootstrap5-req mb-3">'
                 '<div class="form-check">'
                 '<input class="form-check-input is-invalid" id="id_test" name="test" required type="checkbox">'
                 '<label class="form-check-label" for="id_test">Test</label>'
-                '<div class="invalid-feedback">This field is required.</div>'
+                '<div id="id_test_error" class="w-100">'
+                '<div class="invalid-feedback d-block">This field is required.</div>'
+                "</div>"
                 "</div>"
                 "</div>"
             ),
@@ -40,7 +50,10 @@ class InputTypeCheckboxTestCase(BootstrapTestCase):
     def test_input_type_checkbox_is_valid(self):
         """Test field with checkbox widget."""
         self.assertHTMLEqual(
-            self.render("{% bootstrap_field form.test %}", context={"form": CheckboxTestForm(data={"test": "on"})}),
+            self.render(
+                "{% bootstrap_field form.test %}",
+                context={"form": CheckboxTestForm(data={"test": "on"})},
+            ),
             (
                 '<div class="django_bootstrap5-success django_bootstrap5-req mb-3">'
                 '<div class="form-check">'
@@ -55,7 +68,8 @@ class InputTypeCheckboxTestCase(BootstrapTestCase):
         """Test field with checkbox widget, style switch."""
         self.assertHTMLEqual(
             self.render(
-                '{% bootstrap_field form.test checkbox_style="switch" %}', context={"form": CheckboxTestForm()}
+                '{% bootstrap_field form.test checkbox_style="switch" %}',
+                context={"form": CheckboxTestForm()},
             ),
             (
                 '<div class="django_bootstrap5-req mb-3">'
@@ -70,7 +84,10 @@ class InputTypeCheckboxTestCase(BootstrapTestCase):
     def test_bootstrap_field_checkbox_horizontal(self):
         """Test field with checkbox widget, layout horizontal."""
         self.assertHTMLEqual(
-            self.render("{% bootstrap_field form.test layout='horizontal' %}", context={"form": CheckboxTestForm()}),
+            self.render(
+                "{% bootstrap_field form.test layout='horizontal' %}",
+                context={"form": CheckboxTestForm()},
+            ),
             (
                 '<div class="django_bootstrap5-req mb-3 row">'
                 '<div class="col-sm-10 offset-sm-2">'

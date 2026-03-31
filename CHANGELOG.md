@@ -1,5 +1,84 @@
 # Changelog
 
+## 26.2 (2026-02-08)
+
+- Add size parameter support for RadioSelectButtonGroup widget (#789, thanks sgordon16)
+- Fix FieldRenderer label_html function returning unsafe html (#805, thanks @lyndonscotthumphris)
+- Add extra_classes to pagination tag (#765).
+
+## 26.1 (2026-01-03)
+
+- Change form-control-static to form-control-plaintext (#787).
+- Refactor release workflow to tag-based publishing via GitHub (#802).
+- Remove tests folder from coverage source (#801).
+- Add smoke test (#799).
+- Fix tests for Django 6 (#797, #798).
+- Fix tox and CI (#793, #794, #795).
+- Drop support for Django 5.1 (EOL) (#793).
+
+## 25.3 (2025-11-14)
+
+- Return safe HTML while minimizing use of mark_safe (#782, thanks @lyndonscotthumphris #778).
+- Remove support for Python 3.9 (EOL) (#779, #781).
+- Make sure that field errors are always visible (#767, @xi).
+- Add support for Python 3.14 (#774).
+- Add support for Django 6.0 (#773).
+- Update settings.rst (#756, @inpool).
+
+## 25.2 (2025-07-30)
+
+- Fix help text and error IDs for aria-describedby (#746, thanks @xi).
+- Symlink CHANGELOG.md into docs for Sphinx (#750).
+- Drop support for Django 5.0 (EOL) (#751).
+- Add support for Django 5.2 (#753).
+- Uset `setup-uv` and `uv build` (#759).
+- Use `uv.lock` in GitHub Actions (#760).
+
+## 25.1 (2025-03-01)
+
+- Hyphenate attributes with certain prefixes (#737, #524, thanks @yakky).
+- Switch to just and uv for package management (#734).
+- Remove `<nav>` from pagination (#686, @xi).
+- Add an `id` to the help text of fields for Django 5.0+, to match the `aria-describedby` attribute.
+- Drop support for Python 3.8 in the test matrix
+
+## 24.3 (2024-09-17)
+
+- Add support for Django 5.1 (#663).
+- Add support for Jinja2 (#664, @jorenham)
+
+## 24.2 (2024-04-23)
+
+- Add .editorconfig (#598).
+- Remove support for Django 4.1 (EOL) (#597).
+- Add support for color mode (#593).
+- Change bootstrap_setting from filter to tag (#595).
+- Remove support for Python 3.7 (EOL) (#588).
+- Remove support for Django 3.2 (EOL) (#583).
+- Update Bootstrap to 5.3.3 (#584).
+- Fix Read the Docs (#585, #587).
+
+## 24.1 (2024-04-12)
+
+- Fix RadioSelectButtonGroup rendering and add 'disabled' attribute to radio button group template (#447).
+
+## 23.4 (2023-12-28)
+
+- Use ruff instead of black for formatting (#536).
+- Drop support for Python 3.7 in test matrix (#533).
+- Fix support for Django 4.2 in test matrix (#533).
+- Pass "horizontal_field_offset_class" to child renderers (#391, #521).
+- Add support for Django 5.0 (#538).
+- Add support for Python 3.12 (#538).
+- Revert packaging tools to setuptools, build, tox and twine (#538).
+
+## 23.3 (2023-06-03)
+
+- Switch to Hatch for builds and environments (#515).
+- Improve and fix CI on GitHub Actions (#515).
+- Reinstate coveralls (#515).
+- Update Sphinx and switch to Furo theme (#515).
+
 ## 23.2 (2023-04-29)
 
 - Update packaging, reduce dependencies (#487, #488, #494).
@@ -19,7 +98,7 @@
 
 - Add support for Python 3.11 (#389).
 - Make it easier to override templates in custom renderers (#373).
-- Added .form-label default to `<label>`s (#180).
+- Added `.form-label` default to `<label>` tags (#180).
 - Update radio_select_button_group widget to BS5 (#313).
 - Fix `addon_before_class` and `addon_after_class`, which were being ignored (#153).
 - Fix to issue (#349) where `has-validation` was incorrectly rounding before and after elements' borders when validated.
@@ -48,6 +127,7 @@
 - Switch to a [CalVer](https://calver.org) YY.MINOR versioning scheme. MINOR is the number of the release in the given year. This is the first release in 2021 using this scheme, so its version is 21.1. The next version this year will be 21.2. The first version in 2022 will be 22.1.
 - Update Bootstrap to 5.1.3 (#167, #194).
 - Add support for Django 4 and Python 3.10 (#193).
+
 ## 2.1.2 (2021-08-16)
 
 - Fix disabled parameter for RadioSelect and CheckboxSelectMultiple (#163).

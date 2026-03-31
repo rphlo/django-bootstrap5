@@ -1,6 +1,6 @@
 from django import forms
 
-from .base import BootstrapTestCase, html_39x27
+from .base import DJANGO_VERSION, BootstrapTestCase
 
 
 class XssTestForm(forms.Form):
@@ -24,21 +24,37 @@ class FieldTestCase(BootstrapTestCase):
     def test_show_help(self):
         html = self.render("{% bootstrap_field form.subject %}", {"form": SubjectTestForm()})
         self.assertIn("my_help_text", html)
+        if DJANGO_VERSION >= "5":  # TODO: Django 4.2
+            self.assertIn('aria-describedby="id_subject_helptext"', html)
+            self.assertIn('<div id="id_subject_helptext" class="form-text">my_help_text</div>', html)
         self.assertNotIn("<i>my_help_text</i>", html)
         html = self.render("{% bootstrap_field form.subject show_help=False %}", {"form": SubjectTestForm()})
         self.assertNotIn("my_help_text", html)
+
+    def test_help_text_overridden_aria_describedby(self):
+        if DJANGO_VERSION >= "5":  # TODO: Django 4.2
+            form = SubjectTestForm()
+            form.fields["subject"].widget.attrs["aria-describedby"] = "my_id"
+            html = self.render("{% bootstrap_field form.subject %}", {"form": form})
+            self.assertIn('<div id="id_subject_helptext" class="form-text">my_help_text</div>', html)
 
     def test_placeholder(self):
         html = self.render("{% bootstrap_field form.subject %}", {"form": SubjectTestForm()})
         self.assertIn('type="text"', html)
         self.assertIn('placeholder="placeholdertest"', html)
 
+    def test_field_class(self):
+        html = self.render(
+            "{% bootstrap_field form.subject field_class='field-class-test' %}", {"form": SubjectTestForm()}
+        )
+        self.assertIn('class="form-control field-class-test"', html)
+
     def test_xss_field(self):
         html = self.render("{% bootstrap_field form.xss_field %}", {"form": XssTestForm()})
         self.assertIn('type="text"', html)
-        self.assertIn(html_39x27(">XSS&quot; onmouseover=&quot;alert(&#x27;Hello, XSS&#x27;)&quot; foo=&quot;<"), html)
+        self.assertIn((">XSS&quot; onmouseover=&quot;alert(&#x27;Hello, XSS&#x27;)&quot; foo=&quot;<"), html)
         self.assertIn(
-            html_39x27('placeholder="XSS&quot; onmouseover=&quot;alert(&#x27;Hello, XSS&#x27;)&quot; foo=&quot;"'), html
+            ('placeholder="XSS&quot; onmouseover=&quot;alert(&#x27;Hello, XSS&#x27;)&quot; foo=&quot;"'), html
         )
 
     def test_empty_permitted(self):
